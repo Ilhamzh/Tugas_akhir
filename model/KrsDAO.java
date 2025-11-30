@@ -16,16 +16,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * DAO untuk mengambil data KRS / Kartu Studi Mahasiswa.
- */
+
 public class KrsDAO {
 
-    /**
-     * Mengambil daftar mata kuliah yang diambil oleh mahasiswa tertentu.
-     * @param nim NIM mahasiswa
-     * @return List baris Object[] untuk langsung dimasukkan ke DefaultTableModel
-     */
+  
     public List<Object[]> getKrsByNim(String nim) {
         List<Object[]> result = new ArrayList<>();
 
@@ -53,9 +47,7 @@ public class KrsDAO {
                     String jam       = rs.getString("jam");
                     int sks          = rs.getInt("sks");
 
-                    // Kolom JTable: "Kode Matkul", "Nama Matkul", "Nama Dosen",
-                    //               "Hari", "Jam", "Ruang", "SKS"
-                    // Ruang belum ada di DB → isi "-" dulu
+               
                     result.add(new Object[]{ kode, namaMatkul, namaDosen, hari, jam, "-", sks });
                 }
             }
@@ -68,3 +60,4 @@ public class KrsDAO {
         return result;
     }
 }
+
