@@ -53,7 +53,6 @@ public class DosenDAO {
             ps.setString(1, d.nid);
             ps.setString(2, d.nama);
             ps.setString(3, d.kodeDosen);
-            ps.setString(4, d.jenisKelamin); 
             ps.setString(4, d.password);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -72,3 +71,4 @@ public class DosenDAO {
         }
     }
 }
+
