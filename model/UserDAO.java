@@ -9,9 +9,6 @@ package model;
  * @author sbtsp
  */
 
-/*
- * Data Access Object untuk user dan mahasiswa
- */
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,15 +21,7 @@ import java.util.Map;
 
 public class UserDAO {
 
-    /**
-     * Otentikasi pengguna berdasarkan tabel User.
-     * Tabel User berisi kolom: id (PK), password, role.
-     * role: 'Mahasiswa', 'Dosen', 'Admin'
-     *
-     * @param id       NIM / NID / ID admin
-     * @param password password yang diinput
-     * @return Map dengan key: "role" dan "nama" atau null jika gagal
-     */
+ 
     public Map<String, String> authenticate(String id, String password) {
         Map<String, String> userData = null;
         String role = null;
@@ -71,13 +60,8 @@ public class UserDAO {
         return userData;
     }
 
-    // =================== MAHASISWA CRUD ===================
 
-    /**
-     * Tambah mahasiswa baru.
-     * - Insert ke tabel Mahasiswa (nim, nama, password)
-     * - Insert ke tabel User (id, password, role='Mahasiswa')
-     */
+ 
     public boolean addMahasiswa(Mahasiswa mhs) {
         String sqlMahasiswa = "INSERT INTO Mahasiswa (nim, nama, password) VALUES (?, ?, ?)";
         String sqlUser      = "INSERT INTO User (id, password, role) VALUES (?, ?, 'Mahasiswa')";
@@ -115,11 +99,7 @@ public class UserDAO {
         return false;
     }
 
-    /**
-     * Hapus mahasiswa berdasarkan NIM.
-     * - Hapus dari tabel User
-     * - Hapus dari tabel Mahasiswa
-     */
+  
     public boolean deleteMahasiswa(String nim) {
         String sqlDeleteUser = "DELETE FROM User WHERE id = ?";
         String sqlDeleteMhs  = "DELETE FROM Mahasiswa WHERE nim = ?";
@@ -154,9 +134,7 @@ public class UserDAO {
         return false;
     }
 
-    /**
-     * Ambil semua mahasiswa.
-     */
+ 
     public List<Mahasiswa> getAllMahasiswa() {
         List<Mahasiswa> list = new ArrayList<>();
         String sql = "SELECT nim, nama, password FROM Mahasiswa ORDER BY nim";
@@ -181,9 +159,6 @@ public class UserDAO {
         return list;
     }
 
-    // =================== HELPER ===================
-
-    // Ambil nama mahasiswa dari tabel Mahasiswa
     private String getMahasiswaName(String nim, Connection conn) throws SQLException {
         String sql = "SELECT nama FROM Mahasiswa WHERE nim = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -205,3 +180,4 @@ public class UserDAO {
         }
     }
 }
+
