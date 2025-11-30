@@ -48,9 +48,9 @@ public class LoginController {
                         JOptionPane.INFORMATION_MESSAGE
                 );
 
-                // Buka form sesuai role
+
                 if ("Mahasiswa".equals(role)) {
-                    // id = NIM
+
                     Home homeView = new Home(id, nama);
                     homeView.setLocationRelativeTo(null);
                     homeView.setVisible(true);
@@ -72,7 +72,7 @@ public class LoginController {
                     return;
                 }
 
-                // Tutup form login setelah berhasil
+
                 loginView.dispose();
 
             } else {
@@ -93,3 +93,4 @@ public class LoginController {
         }
     }
 }
+
