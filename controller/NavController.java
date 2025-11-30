@@ -17,10 +17,10 @@ import javax.swing.JOptionPane;
  */
 public class NavController {
 
-    private JFrame currentView;   // Frame yang sedang aktif
-    private String userRole;      // "Mahasiswa", "Dosen", "Admin"
-    private String nimUser;       // Untuk Mahasiswa
-    private String namaUser;      // Untuk Mahasiswa
+    private JFrame currentView;   
+    private String userRole;      
+    private String nimUser;       
+    private String namaUser;      
 
     /**
      * Konstruktor lengkap (dipakai dari Home setelah login Mahasiswa)
@@ -89,7 +89,6 @@ public class NavController {
         }
     }
 
-    // ====================== MAHASISWA ======================
 
     private void handleMahasiswaNavigation(String menuName) {
         switch (menuName) {
@@ -138,10 +137,8 @@ public class NavController {
         }
     }
 
-    // ======================== DOSEN ========================
 
     private void handleDosenNavigation(String menuName) {
-        // Nanti bisa disesuaikan dengan menu di form Dosen
         switch (menuName) {
             case "Input Nilai":
                 openView(new InputNilai());
@@ -163,10 +160,8 @@ public class NavController {
         }
     }
 
-    // ======================== ADMIN ========================
 
     private void handleAdminNavigation(String menuName) {
-        // Nanti bisa disesuaikan dengan teks menu di form Admin
         switch (menuName) {
             case "Home":
                 openView(new Admin());
@@ -191,3 +186,4 @@ public class NavController {
         }
     }
 }
+
