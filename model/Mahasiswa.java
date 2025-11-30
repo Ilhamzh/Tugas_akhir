@@ -9,11 +9,6 @@ package model;
  * @author sbtsp
  */
 
-// Entitas Mahasiswa
-
-/*
- * Entitas Mahasiswa
- */
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +17,9 @@ public class Mahasiswa {
     private String nim;
     private String nama;
     private String password;
-    private boolean isActive = false; // Untuk registrasi ulang
-    private List<Matkul> krs = new ArrayList<>();      // Matkul yang diambil
-    private List<Nilai> transkrip = new ArrayList<>(); // Nilai yang didapat
+    private boolean isActive = false; 
+    private List<Matkul> krs = new ArrayList<>();     
+    private List<Nilai> transkrip = new ArrayList<>(); 
 
     public Mahasiswa(String nim, String nama, String password) {
         this.nim = nim;
@@ -32,7 +27,7 @@ public class Mahasiswa {
         this.password = password;
     }
 
-    // Getter & Setter
+
     public String getNim() {
         return nim;
     }
@@ -73,3 +68,4 @@ public class Mahasiswa {
         return transkrip;
     }
 }
+
