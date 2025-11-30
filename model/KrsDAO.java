@@ -30,13 +30,13 @@ public class KrsDAO {
         List<Object[]> result = new ArrayList<>();
 
         String sql =
-                "SELECT m.kode_matkul, m.nama_matkul, d.nama AS nama_dosen, " +
-                "       m.hari, m.jam, m.sks " +
-                "FROM KRS k " +
-                "JOIN Matkul m ON k.kode_matkul = m.kode_matkul " +
-                "JOIN Dosen d ON m.nid_dosen = d.nid " +
-                "WHERE k.nim = ? " +
-                "ORDER BY m.kode_matkul";
+        "SELECT m.kode_matkul, m.nama_matkul, d.nama AS nama_dosen, " +
+        "       m.hari, m.jam, m.ruangan, m.sks " +
+        "FROM KRS k " +
+        "JOIN Matkul m ON k.kode_matkul = m.kode_matkul " +
+        "JOIN Dosen d ON m.nid_dosen = d.nid " +
+        "WHERE k.nim = ? " +
+        "ORDER BY m.kode_matkul";
 
         Connection conn = DBConnection.getConnection();
         if (conn == null) return result;
@@ -51,6 +51,7 @@ public class KrsDAO {
                     String namaDosen = rs.getString("nama_dosen");
                     String hari      = rs.getString("hari");
                     String jam       = rs.getString("jam");
+                    String ruang      = rs.getString("ruangan");
                     int sks          = rs.getInt("sks");
 
                     // Kolom JTable: "Kode Matkul", "Nama Matkul", "Nama Dosen",
@@ -68,3 +69,4 @@ public class KrsDAO {
         return result;
     }
 }
+
