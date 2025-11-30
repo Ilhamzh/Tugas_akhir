@@ -22,9 +22,6 @@ public class NavController {
     private String nimUser;       
     private String namaUser;      
 
-    /**
-     * Konstruktor lengkap (dipakai dari Home setelah login Mahasiswa)
-     */
     public NavController(JFrame currentView, String userRole, String nimUser, String namaUser) {
         this.currentView = currentView;
         this.userRole = userRole;
@@ -32,9 +29,7 @@ public class NavController {
         this.namaUser = namaUser;
     }
 
-    /**
-     * Konstruktor sederhana (kalau tidak butuh NIM)
-     */
+
     public NavController(JFrame currentView, String userRole) {
         this(currentView, userRole, null, null);
     }
@@ -51,10 +46,6 @@ public class NavController {
         }
     }
 
-    /**
-     * Dipanggil dari Home (dan form lain) ketika user klik menu di sidebar.
-     * menuName diambil dari text pada JTextField (Home, Kartu Studi, dll).
-     */
     public void navigate(String menuName) {
         try {
             if (userRole == null) {
@@ -186,4 +177,5 @@ public class NavController {
         }
     }
 }
+
 
