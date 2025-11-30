@@ -6,44 +6,75 @@ package interfaces;
 import controller.NavController;
 import javax.swing.table.DefaultTableModel;
 import model.KrsDAO;
-import javax.swing.JButton;
 
 
-/**
- *
- * @author sbtsp
- */
 public class KartuStudi extends javax.swing.JFrame {
 
-    /**
-     * Creates new form KartuStudi
-     */
     private String nimUser;
-private String namaUser;
-private final String userRole = "Mahasiswa";
-private NavController navController;
+    private String namaUser;
+    private final String userRole = "Mahasiswa";
+    private NavController navController;
 
-private KrsDAO krsDAO = new KrsDAO();   // yang tadi buat load KRS
+    private KrsDAO krsDAO = new KrsDAO();
+    
 
 
     public KartuStudi() {
-    initComponents();
-    // kalau mau: bisa panggil setupNavListeners() juga di sini,
-    // tapi nanti nimUser & namaUser bakal null (dipakai cuma untuk testing desain).
-}
+        initComponents();
+        nimUser = "672024116"; 
+        namaUser = "Yanto Balap"; 
+        
+        navController = new NavController(this, userRole, nimUser, namaUser);
+        setupNavListeners();
+        updateHeader(namaUser, nimUser);
+        loadKartuStudi();
+    }
+    
+    public KartuStudi(String nimUser, String namaUser) {
+        this.nimUser = nimUser;
+        this.namaUser = namaUser;
+        initComponents();
 
-public KartuStudi(String nimUser, String namaUser) {
-    this.nimUser = nimUser;
-    this.namaUser = namaUser;
-    initComponents();
+        updateHeader(namaUser, nimUser); 
+        
+        navController = new NavController(this, userRole, nimUser, namaUser);
+        setupNavListeners();
+        loadKartuStudi();
+    }
+    
+    private void updateHeader(String nama, String id) {
+        if (jLabel13 != null) jLabel13.setText(nama);
+        if (jLabel14 != null) jLabel14.setText(id);
+    }
+    
+    private void setupNavListeners() {
+        
+        jButton2.addActionListener(e -> navController.navigate("Home"));
+        jButton3.addActionListener(e -> navController.navigate("Registrasi Ulang"));
+        jButton4.addActionListener(e -> navController.navigate("Registrasi Matkul"));
+        jButton5.addActionListener(e -> navController.navigate("Kartu Studi"));
+        jButton6.addActionListener(e -> navController.navigate("Hasil Studi"));
+        jButton7.addActionListener(e -> navController.navigate("Jadwal Kuliah"));
+        jButton8.addActionListener(e -> navController.navigate("Transkrip Nilai"));
+        jButton9.addActionListener(e -> navController.navigate("Bimbingan"));
+        
+        // Logout
+        jButton1.addActionListener(e -> navController.navigate("LogOut"));
+    }
 
-    navController = new NavController(this, userRole, nimUser, namaUser);
-    setupNavListeners();
-    loadKartuStudi(); // kalau kamu punya fungsi ini
-}
+    private void loadKartuStudi() {
+        if (nimUser == null || nimUser.isEmpty()) {
+            return; 
+        }
 
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); 
 
-
+        
+        for (Object[] row : krsDAO.getKrsByNim(nimUser)) {
+            model.addRow(row);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -315,18 +346,7 @@ public KartuStudi(String nimUser, String namaUser) {
     });
 }
     
-        private void loadKartuStudi() {
-        if (nimUser == null || nimUser.isEmpty()) {
-            return; // Tidak ada NIM → tidak usah load
-        }
-
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0); // Bersihkan tabel
-
-        for (Object[] row : krsDAO.getKrsByNim(nimUser)) {
-            model.addRow(row);
-        }
-    }
+        
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -348,27 +368,4 @@ public KartuStudi(String nimUser, String namaUser) {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
-
-    private void setupNavListeners() {
-        JButton[] menuButtons = {
-        jButton2, // Home
-        jButton3, // Registrasi Ulang
-        jButton4, // Registrasi Matkul
-        jButton5, // Kartu Studi
-        jButton6, // Hasil Studi
-        jButton7, // Jadwal Kuliah
-        jButton8, // Transkrip Nilai
-        jButton9  // Bimbingan
-    };
-
-    for (JButton btn : menuButtons) {
-        btn.addActionListener(e -> {
-            String menuName = btn.getText();   // contoh: "Kartu Studi"
-            navController.navigate(menuName);  // lempar ke NavController
-        });
-    }
-
-    // tombol LogOut (jButton1)
-    jButton1.addActionListener(e -> navController.navigate("LogOut"));
-    }
 }

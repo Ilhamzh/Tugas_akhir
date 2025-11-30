@@ -4,22 +4,17 @@
  */
 package interfaces;
 
-import controller.NavController; // <-- Import Controller Navigasi
+import controller.NavController; 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-/**
- *
- * @author sbtsp
- */
+
 public class Home extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Home
-     */
+    
     private String nimUser;
     private String namaUser;
     private NavController navController;
@@ -31,11 +26,6 @@ public class Home extends javax.swing.JFrame {
         // Biasanya ini akan diganti oleh constructor berparameter
     }
     
-    /**
-     * Konstruktor Utama untuk Mahasiswa setelah Login
-     * @param nim NIM Mahasiswa yang login
-     * @param nama Nama Mahasiswa yang login
-     */
     public Home(String nim, String nama) {
         this.nimUser = nim;
         this.namaUser = nama;
@@ -43,7 +33,7 @@ public class Home extends javax.swing.JFrame {
         
         // Inisialisasi Controller Navigasi
         navController = new NavController(this, userRole, nim, nama);
-        
+       
         // Mengisi label header dengan data pengguna
         setNamaMahasiswa(nama);
         setNimMahasiswa(nim);
@@ -51,7 +41,7 @@ public class Home extends javax.swing.JFrame {
         // Memasang listener pada menu-menu di sisi kiri
         setupNavListeners();
         
-        // TODO: Panggil MahasiswaController untuk mengisi data detail pada jPanel4
+        
     }
     public void setNamaMahasiswa(String nama) {
         // Asumsi jLabel13 adalah JLabel untuk nama Mahasiswa
@@ -62,7 +52,7 @@ public class Home extends javax.swing.JFrame {
 
     // Metode untuk memperbarui label NIM mahasiswa di header
     public void setNimMahasiswa(String nim) {
-        // Asumsi jLabel14 adalah JLabel untuk NIM Mahasiswa
+        
         if (jLabel14 != null) {
             jLabel14.setText(nim);
         }
@@ -71,32 +61,29 @@ public class Home extends javax.swing.JFrame {
     private void setupNavListeners() {
         // Daftar semua menu yang menggunakan JTextField
         JButton[] menuButtons = {
-        jButton2, // Home
-        jButton3, // Registrasi Ulang
-        jButton4, // Registrasi Matkul
-        jButton5, // Kartu Studi
-        jButton6, // Hasil Studi
-        jButton7, // Jadwal Kuliah
-        jButton8, // Transkrip Nilai
-        jButton9  // Bimbingan
+        jButton2, 
+        jButton3, 
+        jButton4, 
+        jButton5, 
+        jButton6, 
+        jButton7, 
+        jButton9  
     };
         
         for (JButton btn : menuButtons) {
         btn.addActionListener(e -> {
-            String menuName = btn.getText();   // misalnya "Home", "Registrasi Matkul", dll
-            navController.navigate(menuName);  // lempar ke NavController
+            String menuName = btn.getText();   
+            navController.navigate(menuName);  
         });
     }
 
     // Tombol logout (misal jButton1)
-    jButton1.addActionListener(e -> {
-        navController.navigate("LogOut");
-    });
+    jButton1.addActionListener(e -> navController.navigate("LogOut"));
 }
         
 
     // Metode untuk memperbarui label nama mahasiswa di header
-    // Metode ini harus ada agar LoginController tidak error saat memanggilnya
+    // Metode ini harus ada agar SLoginController tidak error saat memanggilnya
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -476,10 +463,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Login login = new Login();          // balik ke form Login
-    login.setLocationRelativeTo(null);  // posisi di tengah layar
-    login.setVisible(true);             // tampilkan login
-    this.dispose();                     // tutup form Home
+        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

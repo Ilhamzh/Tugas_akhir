@@ -4,21 +4,26 @@
  */
 package model;
 
-/**
- *
- * @author sbtsp
- */
-
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.ArrayList;
 import java.util.List;
+
+class Matkul {
+}
+class Nilai {
+}
 
 public class Mahasiswa {
     private String nim;
     private String nama;
     private String password;
+    // isActive merefleksikan status_registrasi di DB
     private boolean isActive = false; 
-    private List<Matkul> krs = new ArrayList<>();     
+    
+    // Tipe List harus diimpor atau didefinisikan
+    private List<Matkul> krs = new ArrayList<>();       
     private List<Nilai> transkrip = new ArrayList<>(); 
 
     public Mahasiswa(String nim, String nama, String password) {
@@ -27,7 +32,16 @@ public class Mahasiswa {
         this.password = password;
     }
 
+    // Constructor lengkap (untuk memuat data dari DB)
+    public Mahasiswa(String nim, String nama, String password, boolean isActive) {
+        this.nim = nim;
+        this.nama = nama;
+        this.password = password;
+        this.isActive = isActive;
+    }
 
+    // --- Getter & Setter ---
+    
     public String getNim() {
         return nim;
     }
@@ -52,14 +66,15 @@ public class Mahasiswa {
         this.password = password;
     }
 
-    public boolean isActive() {
+    // Mengganti isActive() menjadi getStatusRegistrasi() agar lebih jelas
+    public boolean getStatusRegistrasi() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
-        isActive = active;
+    public void setStatusRegistrasi(boolean active) {
+        this.isActive = active;
     }
-
+    
     public List<Matkul> getKrs() {
         return krs;
     }
@@ -68,4 +83,3 @@ public class Mahasiswa {
         return transkrip;
     }
 }
-

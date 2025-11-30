@@ -3,20 +3,57 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package interfaces;
+import controller.NavController;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
-/**
- *
- * @author sbtsp
- */
+
 public class Dosen extends javax.swing.JFrame {
+    private String userId;
+    private String userName;
+    private NavController navController;
+    private final String userRole = "Dosen";
 
-    /**
-     * Creates new form Dosen
-     */
+    
     public Dosen() {
         initComponents();
+        this.userId = "D001";
+        this.userName = "Budi Santoso";
+        navController = new NavController(this, userRole, userId, userName);
+        setupNavListeners();
+        updateHeader(userName, userId);
     }
 
+   
+    public Dosen(String userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
+        initComponents();
+        navController = new NavController(this, userRole, userId, userName);
+        setupNavListeners();
+        updateHeader(userName, userId);
+    }
+    
+    private void updateHeader(String nama, String id) {
+        // Asumsi jLabel3 digunakan untuk menampilkan identitas Dosen
+        if (jLabel3 != null) {
+             jLabel3.setText(nama + " (" + id + ")");
+        }
+        
+    }
+
+    private void setupNavListeners() {
+        // Navigasi Samping: Mengikat tombol ke NavController
+        // Menggunakan getText() agar string yang dikirim ke controller sama persis
+        jButton2.addActionListener(e -> navController.navigate(jButton2.getText()));      // Home
+        jButton3.addActionListener(e -> navController.navigate(jButton3.getText()));      // Jadwal Mengajar
+        jButton4.addActionListener(e -> navController.navigate(jButton4.getText()));      // Bimbingan MHS
+        jButton5.addActionListener(e -> navController.navigate(jButton5.getText()));      // Input Nilai
+        jButton6.addActionListener(e -> navController.navigate(jButton6.getText()));      // Lupa Password
+        
+        // Logout
+        jButton1.addActionListener(e -> navController.navigate("LogOut"));
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

@@ -17,5 +17,4 @@ public class Dosen {
         this.kodeDosen = kodeDosen;
         this.password = nid; 
     }
-
 }

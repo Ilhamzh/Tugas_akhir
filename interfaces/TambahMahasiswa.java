@@ -4,39 +4,63 @@
  */
 package interfaces;
 
-import controller.MahasiswaController;
+import controller.MahasiswaController; // Pastikan ini diimpor
+import controller.NavController;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
-/**
- *
- * @author sbtsp
- */
+
 public class TambahMahasiswa extends javax.swing.JFrame {
 
-    /**
-     * Creates new form TambahMahasiswa
-     */
     private MahasiswaController controller;
     private DefaultTableModel tableModel;
-    
+    private NavController navController;
+    private final String userRole = "Admin";
+    private String userId;
+    private String userName;
+
     public TambahMahasiswa() {
         initComponents();
         controller = new MahasiswaController();
-        
-        // Setup Table Model
         tableModel = (DefaultTableModel) jTable1.getModel();
-        controller.populateTable(tableModel); // Isi data awal
+        controller.populateTable(tableModel);
         
-        // Saat ini fokus pada CRUD
-        
-        // Set aksi untuk tombol Tambah dan Hapus
+        navController = new NavController(this, userRole, "admin", "Admin Sistem");
+        setupNavListeners();
     }
 
-// ... (Kode initComponents yang sangat panjang, pastikan jTable1 sudah diinisialisasi)
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) { // Tambah
+    // KONSTRUKTOR YANG DIBUTUHKAN
+    public TambahMahasiswa(String userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
+        initComponents();
+        controller = new MahasiswaController();
+        tableModel = (DefaultTableModel) jTable1.getModel();
+        controller.populateTable(tableModel);
+        
+        navController = new NavController(this, userRole, userId, userName);
+        setupNavListeners();
+    }
+    
+    private void setupNavListeners() {
+        // Navigasi Samping
+        jButton4.addActionListener(e -> navController.navigate("Home"));
+        jButton5.addActionListener(e -> navController.navigate("Edit Matkul"));
+        jButton7.addActionListener(e -> navController.navigate("Edit Mahasiswa"));
+        jButton8.addActionListener(e -> navController.navigate("Edit Dosen"));
+        jButton6.addActionListener(e -> navController.navigate("Lupa Password"));
+        
+        // Tombol Aksi (CRUD)
+        jButton9.addActionListener(e -> tambahMahasiswaAction()); // Tombol Tambah
+        jButton3.addActionListener(e -> hapusMahasiswaAction()); // Tombol Hapus
+        
+        // Logout
+        jButton1.addActionListener(e -> navController.navigate("LogOut"));
+    }
+    
+    private void tambahMahasiswaAction() {
         String nama = jTextField5.getText();
         String nim = jTextField6.getText();
+        
         String password = JOptionPane.showInputDialog(this, "Masukkan Password untuk Mahasiswa " + nama + ":");
         
         if (nim.isEmpty() || nama.isEmpty() || password == null || password.isEmpty()) {
@@ -45,8 +69,8 @@ public class TambahMahasiswa extends javax.swing.JFrame {
         }
 
         if (controller.addMahasiswa(nim, nama, password)) {
-            JOptionPane.showMessageDialog(this, "Mahasiswa berhasil ditambahkan.", "Sukses", JOptionPane.INFORMATION_MESSAGE);
-            controller.populateTable(tableModel); // Refresh tabel
+            JOptionPane.showMessageDialog(this, "Mahasiswa berhasil ditambahkan. Password: " + password, "Sukses", JOptionPane.INFORMATION_MESSAGE);
+            controller.populateTable(tableModel);
             jTextField5.setText("");
             jTextField6.setText("");
         } else {
@@ -54,7 +78,25 @@ public class TambahMahasiswa extends javax.swing.JFrame {
         }
     }
     
-    
+    private void hapusMahasiswaAction() {
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow >= 0) {
+            String nimToDelete = (String) jTable1.getValueAt(selectedRow, 0);
+            
+            int confirm = JOptionPane.showConfirmDialog(this, "Yakin ingin menghapus Mahasiswa dengan NIM " + nimToDelete + "?", "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
+            
+            if (confirm == JOptionPane.YES_OPTION) {
+                if (controller.deleteMahasiswa(nimToDelete)) {
+                    JOptionPane.showMessageDialog(this, "Mahasiswa berhasil dihapus.", "Sukses", JOptionPane.INFORMATION_MESSAGE);
+                    controller.populateTable(tableModel);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Gagal menghapus mahasiswa. Cek log.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Pilih baris yang ingin dihapus.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+        }
+    }
     
 
     /**
@@ -85,7 +127,7 @@ public class TambahMahasiswa extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jButton9 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -220,7 +262,12 @@ public class TambahMahasiswa extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("hapus");
+        jButton3.setText("Hapus");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -245,7 +292,7 @@ public class TambahMahasiswa extends javax.swing.JFrame {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jButton9))))
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton2)))
+                        .addComponent(jButton3)))
                 .addContainerGap(52, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -266,7 +313,7 @@ public class TambahMahasiswa extends javax.swing.JFrame {
                             .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton9))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
+                        .addComponent(jButton3)
                         .addGap(2, 2, 2)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -316,6 +363,10 @@ public class TambahMahasiswa extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton9ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -353,7 +404,7 @@ public class TambahMahasiswa extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;

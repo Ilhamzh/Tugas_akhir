@@ -5,37 +5,54 @@
 package interfaces;
 
 import controller.NavController;
-import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
-/**
- *
- * @author sbtsp
- */
 public class RegistrasiMatkul extends javax.swing.JFrame {
 
-    /**
-     * Creates new form RegistrasiMatkul
-     */
+    private String userId;
+    private String userName;
     private NavController navController;
-private String nimUser;
-private String namaUser;
-private final String userRole = "Mahasiswa";
+    private final String userRole = "Mahasiswa";
+    
+    public RegistrasiMatkul() {
+        initComponents();
+        setupNavListeners();
+        updateHeader("Yanto Balap", "672024116");
+    }
+    
+    public RegistrasiMatkul(String userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
+        initComponents();
+        navController = new NavController(this, userRole, userId, userName);
+        setupNavListeners();
+        updateHeader(userName, userId);
+    }
+    
+    private void updateHeader(String nama, String id) {
+        if (jLabel13 != null) jLabel13.setText(nama);
+        if (jLabel14 != null) jLabel14.setText(id);
+    }
 
-public RegistrasiMatkul() {
-    initComponents();
-}
-
-
-    public RegistrasiMatkul(String nimUser, String namaUser) {
-    this.nimUser = nimUser;
-    this.namaUser = namaUser;
-    initComponents();
-
-    navController = new NavController(this, userRole, nimUser, namaUser);
-
-    setupNavListeners(); // ✅ WAJIB
-}
-
+    private void setupNavListeners() {
+        // Navigasi Samping
+        jButton2.addActionListener(e -> navController.navigate("Home"));
+        jButton3.addActionListener(e -> navController.navigate("Registrasi Ulang"));
+        jButton4.addActionListener(e -> navController.navigate("Registrasi Matkul"));
+        jButton5.addActionListener(e -> navController.navigate("Kartu Studi"));
+        jButton6.addActionListener(e -> navController.navigate("Hasil Studi"));
+        jButton7.addActionListener(e -> navController.navigate("Jadwal Kuliah"));
+        jButton8.addActionListener(e -> navController.navigate("Transkrip Nilai"));
+        jButton9.addActionListener(e -> navController.navigate("Bimbingan"));
+        
+        // Logout
+        jButton1.addActionListener(e -> navController.navigate("LogOut"));
+        
+        
+        jComboBox1.addActionListener(e -> {
+             
+        });
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -344,20 +361,4 @@ public RegistrasiMatkul() {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     // End of variables declaration//GEN-END:variables
-
-    private void setupNavListeners() {
-        JButton[] menuButtons = {
-        jButton2, jButton3, jButton4,
-        jButton5, jButton6, jButton7,
-        jButton8, jButton9
-    };
-
-    for (JButton btn : menuButtons) {
-        btn.addActionListener(e -> {
-            navController.navigate(btn.getText());
-        });
-    }
-
-    jButton1.addActionListener(e -> navController.navigate("LogOut"));
-    }
 }

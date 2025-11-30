@@ -4,17 +4,59 @@
  */
 package interfaces;
 
-/**
- *
- * @author sbtsp
- */
+import controller.NavController;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 public class InputNilai extends javax.swing.JFrame {
 
-    /**
-     * Creates new form InputNilai
-     */
+    private String userId;
+    private String userName;
+    private NavController navController;
+    private final String userRole = "Dosen";
+    
     public InputNilai() {
         initComponents();
+        navController = new NavController(this, userRole, "D001", "Budi Santoso");
+        setupNavListeners();
+    }
+    
+    public InputNilai(String userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
+        initComponents();
+        navController = new NavController(this, userRole, userId, userName);
+        setupNavListeners();
+        // loadDataNilai();
+    }
+    
+    private void setupNavListeners() {
+        // Navigasi Samping
+        jButton2.addActionListener(e -> navController.navigate("Home"));
+        jButton7.addActionListener(e -> navController.navigate("Jadwal Mengajar"));
+        jButton8.addActionListener(e -> navController.navigate("Bimbingan MHS"));
+        jButton9.addActionListener(e -> navController.navigate("Input Nilai"));
+        jButton6.addActionListener(e -> navController.navigate("Lupa Password"));
+        
+        // Tombol Aksi
+        jButton3.addActionListener(e -> simpanNilaiAction());
+        jButton4.addActionListener(e -> updateNilaiAction());
+        jButton5.addActionListener(e -> hapusNilaiAction());
+        
+        // Logout
+        jButton1.addActionListener(e -> navController.navigate("LogOut"));
+    }
+    
+    private void simpanNilaiAction() {
+         JOptionPane.showMessageDialog(this, "Fungsi Simpan Nilai belum diimplementasikan.", "Info", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    private void updateNilaiAction() {
+         JOptionPane.showMessageDialog(this, "Fungsi Update Nilai belum diimplementasikan.", "Info", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    private void hapusNilaiAction() {
+         JOptionPane.showMessageDialog(this, "Fungsi Hapus Nilai belum diimplementasikan.", "Info", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**

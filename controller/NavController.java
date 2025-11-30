@@ -1,35 +1,31 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controller;
 
-/**
- *
- * @author sbtsp
- */
+
 import interfaces.*;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-/**
- * Controller untuk navigasi antar form/menu.
- */
+
 public class NavController {
 
-    private JFrame currentView;   
-    private String userRole;      
-    private String nimUser;       
-    private String namaUser;      
+    private JFrame currentView;     // Frame yang sedang aktif
+    private String userRole;        // "Mahasiswa", "Dosen", "Admin"
+    private String userId;          // NIM/NID/ID Admin
+    private String namaUser;        // Nama pengguna
 
-    public NavController(JFrame currentView, String userRole, String nimUser, String namaUser) {
+    /**
+     * Konstruktor lengkap (dipakai dari Home setelah login)
+     */
+    public NavController(JFrame currentView, String userRole, String userId, String namaUser) {
         this.currentView = currentView;
         this.userRole = userRole;
-        this.nimUser = nimUser;
+        this.userId = userId;
         this.namaUser = namaUser;
     }
 
-
+    /**
+     * Konstruktor sederhana
+     */
     public NavController(JFrame currentView, String userRole) {
         this(currentView, userRole, null, null);
     }
@@ -46,6 +42,9 @@ public class NavController {
         }
     }
 
+    /**
+     * Dipanggil dari Home (dan form lain) ketika user klik menu di sidebar.
+     */
     public void navigate(String menuName) {
         try {
             if (userRole == null) {
@@ -74,108 +73,102 @@ public class NavController {
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(currentView,
-                    "Gagal memproses navigasi: " + e.getMessage(),
-                    "Error Aplikasi",
+                    "Gagal memproses navigasi: " + e.getMessage() + "\nPastikan semua frame memiliki konstruktor (String id, String nama) dan terimpor.",
+                    "FATAL Error Navigasi",
                     JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
 
+    // ====================== MAHASISWA ======================
 
     private void handleMahasiswaNavigation(String menuName) {
         switch (menuName) {
             case "Home":
-                openView(new Home(nimUser, namaUser));
+                openView(new Home(userId, namaUser));
                 break;
-
             case "Registrasi Ulang":
-                openView(new RegistrasiUlang(nimUser, namaUser));
+                openView(new RegistrasiUlang(userId, namaUser)); 
                 break;
-
             case "Registrasi Matkul":
-                openView(new RegistrasiMatkul(nimUser, namaUser));
+                openView(new RegistrasiMatkul(userId, namaUser));
                 break;
-
             case "Kartu Studi":
-                openView(new KartuStudi(nimUser, namaUser));
+                openView(new KartuStudi(userId, namaUser)); 
                 break;
-
             case "Jadwal Kuliah":
-                openView(new JadwalKuliah(nimUser, namaUser));
+                openView(new JadwalKuliah(userId, namaUser)); 
                 break;
-
             case "Hasil Studi":
-                openView(new HasilStudi(nimUser, namaUser));
+                openView(new HasilStudi(userId, namaUser)); 
                 break;
-
             case "Transkrip Nilai":
-                openView(new TranskripNilai(nimUser, namaUser));
+                openView(new TranskripNilai(userId, namaUser)); 
                 break;
-
             case "Bimbingan":
-                openView(new Bimbingan(nimUser, namaUser));
+                openView(new Bimbingan(userId, namaUser)); 
                 break;
-
             case "LogOut":
                 openView(new Login());
                 break;
-
             default:
-                JOptionPane.showMessageDialog(currentView,
-                        "Menu tidak dikenal: " + menuName,
-                        "Error Navigasi",
-                        JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(currentView, "Menu Mahasiswa tidak dikenal: " + menuName, "Error Navigasi", JOptionPane.ERROR_MESSAGE);
                 break;
         }
     }
 
+    // ======================== DOSEN ========================
 
     private void handleDosenNavigation(String menuName) {
         switch (menuName) {
-            case "Input Nilai":
-                openView(new InputNilai());
+            case "Home":
+                openView(new Dosen(userId, namaUser)); 
+                break;
+            case "Input Nilai": // Teks tombol dari form Dosen
+                openView(new InputNilai(userId, namaUser)); 
                 break;
             case "Jadwal Mengajar":
-                openView(new JadwalMengajar());
+                openView(new JadwalMengajar(userId, namaUser)); 
                 break;
-            case "Bimbingan":
-                openView(new Bimbingan(nimUser, namaUser));
+            case "Bimbingan MHS": // Teks tombol dari form Dosen
+                // ❗ PERBAIKAN: Mengganti BimbinganMhs dengan Bimbingan karena BimbinganMhs belum ada
+                openView(new Bimbingan(userId, namaUser)); 
+                break;
+            case "Lupa Password":
+                openView(new GantiPassword(userId, namaUser));
                 break;
             case "LogOut":
                 openView(new Login());
                 break;
             default:
-                JOptionPane.showMessageDialog(currentView,
-                        "Menu Dosen tidak dikenal: " + menuName,
-                        "Error Navigasi",
-                        JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(currentView, "Menu Dosen tidak dikenal: " + menuName, "Error Navigasi", JOptionPane.ERROR_MESSAGE);
         }
     }
 
+    // ======================== ADMIN ========================
 
     private void handleAdminNavigation(String menuName) {
         switch (menuName) {
             case "Home":
-                openView(new Admin());
+                openView(new Admin(userId, namaUser)); 
                 break;
             case "Edit Mahasiswa":
-                openView(new TambahMahasiswa());
+                openView(new TambahMahasiswa(userId, namaUser)); 
                 break;
             case "Edit Dosen":
-                openView(new TambahDosen());
+                openView(new TambahDosen(userId, namaUser)); 
                 break;
             case "Edit Matkul":
-                openView(new TambahMatkul());
+                openView(new TambahMatkul(userId, namaUser)); 
+                break;
+            case "Lupa Password":
+                openView(new GantiPasswordAdmin(userId, namaUser)); 
                 break;
             case "LogOut":
                 openView(new Login());
                 break;
             default:
-                JOptionPane.showMessageDialog(currentView,
-                        "Menu Admin tidak dikenal: " + menuName,
-                        "Error Navigasi",
-                        JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(currentView, "Menu Admin tidak dikenal: " + menuName, "Error Navigasi", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
-
-

@@ -4,17 +4,57 @@
  */
 package interfaces;
 
-/**
- *
- * @author sbtsp
- */
+import controller.NavController;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 public class TambahDosen extends javax.swing.JFrame {
 
-    /**
-     * Creates new form TambahDosen
-     */
+    private String userId;
+    private String userName;
+    private NavController navController;
+    private final String userRole = "Admin";
+    
+
     public TambahDosen() {
         initComponents();
+        navController = new NavController(this, userRole, "admin", "Admin Sistem");
+        setupNavListeners();
+        
+    }
+    
+    
+    public TambahDosen(String userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
+        initComponents();
+        navController = new NavController(this, userRole, userId, userName);
+        setupNavListeners();
+        
+    }
+    
+    private void setupNavListeners() {
+        // Navigasi Samping
+        jButton4.addActionListener(e -> navController.navigate("Home"));
+        jButton5.addActionListener(e -> navController.navigate("Edit Matkul"));
+        jButton7.addActionListener(e -> navController.navigate("Edit Mahasiswa"));
+        jButton8.addActionListener(e -> navController.navigate("Edit Dosen"));
+        jButton6.addActionListener(e -> navController.navigate("Lupa Password"));
+        
+        // Tombol Aksi
+        jButton2.addActionListener(e -> tambahDosenAction());
+        jButton3.addActionListener(e -> hapusDosenAction());
+        
+        // Logout
+        jButton1.addActionListener(e -> navController.navigate("LogOut"));
+    }
+    
+    private void tambahDosenAction() {
+        JOptionPane.showMessageDialog(this, "Fungsi Tambah Dosen belum diimplementasikan.", "Info", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    private void hapusDosenAction() {
+        JOptionPane.showMessageDialog(this, "Fungsi Hapus Dosen belum diimplementasikan.", "Info", JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**

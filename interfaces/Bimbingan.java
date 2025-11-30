@@ -5,35 +5,67 @@
 package interfaces;
 
 import controller.NavController;
-import javax.swing.JButton;
-/**
- *
- * @author sbtsp
- */
-public class Bimbingan extends javax.swing.JFrame {
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
+
+public class Bimbingan extends javax.swing.JFrame {
+    private String userId;
+    private String userName;
+    private NavController navController;
+    private final String userRole = "Mahasiswa";
     /**
      * Creates new form Bimbingan
      */
-    private NavController navController;
-    private String nimUser;
-    private String namaUser;
-    private final String userRole = "Mahasiswa";
-    
     public Bimbingan() {
         initComponents();
-        // boleh kosong, tanpa navController
+        navController = new NavController(this, userRole, "672024116", "Yanto Balap");
+        setupNavListeners();
+        updateHeader("Yanto Balap", "672024116");
     }
     
-    public Bimbingan(String nimUser, String namaUser) {
-        this.nimUser = nimUser;
-        this.namaUser = namaUser;
+        public Bimbingan(String userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
         initComponents();
+        navController = new NavController(this, userRole, userId, userName);
+        setupNavListeners();
+        updateHeader(userName, userId);
+    }
+    
+    private void updateHeader(String nama, String id) {
+        if (jLabel13 != null) jLabel13.setText(nama);
+        if (jLabel14 != null) jLabel14.setText(id);
+        if (jLabel2 != null) jLabel2.setText("Bimbingan dengan Dosen Pembimbing");
+    }
 
-        navController = new NavController(this, userRole, nimUser, namaUser);
-        setupNavListeners();     // 🔥 ini yang bikin sidebar hidup
-
-        // kalau ada: loadDataHasilStudi(nimUser);
+    private void setupNavListeners() {
+        // Navigasi Samping
+        jButton3.addActionListener(e -> navController.navigate("Home"));
+        jButton4.addActionListener(e -> navController.navigate("Registrasi Ulang"));
+        jButton10.addActionListener(e -> navController.navigate("Registrasi Matkul"));
+        jButton5.addActionListener(e -> navController.navigate("Kartu Studi"));
+        jButton6.addActionListener(e -> navController.navigate("Hasil Studi"));
+        jButton7.addActionListener(e -> navController.navigate("Jadwal Kuliah"));
+        jButton8.addActionListener(e -> navController.navigate("Transkrip Nilai"));
+        jButton9.addActionListener(e -> navController.navigate("Bimbingan"));
+        
+        // Tombol Kirim/Aksi
+        jButton2.addActionListener(e -> kirimPesanBimbingan());
+        
+        // Logout
+        jButton1.addActionListener(e -> navController.navigate("LogOut"));
+    }
+    
+    private void kirimPesanBimbingan() {
+        // Logika kirim pesan ke DB (belum diimplementasikan)
+        String pesan = jTextArea1.getText();
+        if (pesan.trim().isEmpty() || pesan.equals("Tulis Pesan Disini")) {
+             JOptionPane.showMessageDialog(this, "Pesan tidak boleh kosong.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+             return;
+        }
+        JOptionPane.showMessageDialog(this, "Pesan bimbingan dikirim: " + pesan, "Sukses", JOptionPane.INFORMATION_MESSAGE);
+        // jTextArea1.setText("Tulis Pesan Disini"); // Bersihkan
     }
 
     /**
@@ -366,27 +398,4 @@ public class Bimbingan extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
-
-    private void setupNavListeners() {
-        JButton[] menuButtons = {
-            jButton2, // Home
-            jButton3, // Registrasi Ulang
-            jButton4, // Registrasi Matkul
-            jButton5, // Kartu Studi
-            jButton6, // Hasil Studi
-            jButton7, // Jadwal Kuliah
-            jButton8, // Transkrip Nilai
-            jButton9  // Bimbingan
-        };
-
-        for (JButton btn : menuButtons) {
-            btn.addActionListener(e -> {
-                String menuName = btn.getText();
-                navController.navigate(menuName);
-            });
-        }
-
-        // Logout
-        jButton1.addActionListener(e -> navController.navigate("LogOut"));
-    }
 }

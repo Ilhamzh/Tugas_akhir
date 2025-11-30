@@ -1,16 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package model;
+// File: model/DBConnection.java (Pastikan ini sesuai)
 
+package model;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-/**
- *
- * @author sbtsp
- */
+import javax.swing.JOptionPane; 
 
 public class DBConnection {
 
@@ -20,9 +14,15 @@ public class DBConnection {
 
     public static Connection getConnection() {
         try {
+           
+            Class.forName("com.mysql.cj.jdbc.Driver"); 
             return DriverManager.getConnection(URL, USER, PASS);
+        } catch (ClassNotFoundException e) {
+             JOptionPane.showMessageDialog(null, "JDBC Driver tidak ditemukan! Pastikan library MySQL Connector J terpasang.", "Fatal Error Koneksi", JOptionPane.ERROR_MESSAGE);
+             return null;
         } catch (SQLException e) {
-            System.out.println("Koneksi gagal: " + e.getMessage());
+            
+            JOptionPane.showMessageDialog(null, "Koneksi database gagal! Pastikan XAMPP/MySQL running. \nDetail: " + e.getMessage(), "Fatal Error Koneksi", JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }

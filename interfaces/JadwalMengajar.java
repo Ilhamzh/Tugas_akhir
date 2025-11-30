@@ -4,17 +4,49 @@
  */
 package interfaces;
 
-/**
- *
- * @author sbtsp
- */
+import controller.NavController;
+import javax.swing.table.DefaultTableModel;
+
 public class JadwalMengajar extends javax.swing.JFrame {
 
-    /**
-     * Creates new form JadwalMengajar
-     */
+    private String userId;
+    private String userName;
+    private NavController navController;
+    private final String userRole = "Dosen";
+    
     public JadwalMengajar() {
         initComponents();
+        navController = new NavController(this, userRole, "D001", "Budi Santoso");
+        setupNavListeners();
+        updateHeader("Budi Santoso", "D001");
+    }
+    
+    public JadwalMengajar(String userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
+        initComponents();
+        navController = new NavController(this, userRole, userId, userName);
+        setupNavListeners();
+        updateHeader(userName, userId);
+        // loadJadwalMengajar();
+    }
+    
+    private void updateHeader(String nama, String id) {
+        if (jLabel3 != null) {
+             jLabel3.setText(nama + " (" + id + ")");
+        }
+    }
+
+    private void setupNavListeners() {
+        // Navigasi Samping
+        jButton2.addActionListener(e -> navController.navigate("Home"));
+        jButton7.addActionListener(e -> navController.navigate("Jadwal Mengajar"));
+        jButton8.addActionListener(e -> navController.navigate("Bimbingan MHS"));
+        jButton9.addActionListener(e -> navController.navigate("Input Nilai"));
+        jButton6.addActionListener(e -> navController.navigate("Lupa Password"));
+        
+        // Logout
+        jButton1.addActionListener(e -> navController.navigate("LogOut"));
     }
 
     /**

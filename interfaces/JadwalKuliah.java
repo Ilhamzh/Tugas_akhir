@@ -5,35 +5,50 @@
 package interfaces;
 
 import controller.NavController;
-import javax.swing.JButton;
-/**
- *
- * @author sbtsp
- */
+import javax.swing.table.DefaultTableModel;
+
 public class JadwalKuliah extends javax.swing.JFrame {
 
-    /**
-     * Creates new form JadwalKuliah
-     */
+    private String userId;
+    private String userName;
     private NavController navController;
-    private String nimUser;
-    private String namaUser;
     private final String userRole = "Mahasiswa";
     
     public JadwalKuliah() {
         initComponents();
-        // boleh kosong, tanpa navController
+        navController = new NavController(this, userRole, "672024116", "Yanto Balap");
+        setupNavListeners();
+        updateHeader("Yanto Balap", "672024116");
     }
     
-    public JadwalKuliah(String nimUser, String namaUser) {
-        this.nimUser = nimUser;
-        this.namaUser = namaUser;
+    public JadwalKuliah(String userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
         initComponents();
+        navController = new NavController(this, userRole, userId, userName);
+        setupNavListeners();
+        updateHeader(userName, userId);
+        // loadJadwal();
+    }
+    
+    private void updateHeader(String nama, String id) {
+        if (jLabel13 != null) jLabel13.setText(nama);
+        if (jLabel14 != null) jLabel14.setText(id);
+    }
 
-        navController = new NavController(this, userRole, nimUser, namaUser);
-        setupNavListeners();     // 🔥 ini yang bikin sidebar hidup
-
-        // kalau ada: loadDataHasilStudi(nimUser);
+    private void setupNavListeners() {
+        // Navigasi Samping
+        jButton2.addActionListener(e -> navController.navigate("Home"));
+        jButton3.addActionListener(e -> navController.navigate("Registrasi Ulang"));
+        jButton4.addActionListener(e -> navController.navigate("Registrasi Matkul"));
+        jButton5.addActionListener(e -> navController.navigate("Kartu Studi"));
+        jButton6.addActionListener(e -> navController.navigate("Hasil Studi"));
+        jButton7.addActionListener(e -> navController.navigate("Jadwal Kuliah"));
+        jButton8.addActionListener(e -> navController.navigate("Transkrip Nilai"));
+        jButton9.addActionListener(e -> navController.navigate("Bimbingan"));
+        
+        // Logout
+        jButton1.addActionListener(e -> navController.navigate("LogOut"));
     }
 
     /**
@@ -323,7 +338,7 @@ public class JadwalKuliah extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JadwalKuliah().setVisible(true); // pake constructor tanpa parameter
+                new JadwalKuliah().setVisible(true);
             }
         });
     }
@@ -347,27 +362,4 @@ public class JadwalKuliah extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
-
-    private void setupNavListeners() {
-        JButton[] menuButtons = {
-            jButton2, // Home
-            jButton3, // Registrasi Ulang
-            jButton4, // Registrasi Matkul
-            jButton5, // Kartu Studi
-            jButton6, // Hasil Studi
-            jButton7, // Jadwal Kuliah
-            jButton8, // Transkrip Nilai
-            jButton9  // Bimbingan
-        };
-
-        for (JButton btn : menuButtons) {
-            btn.addActionListener(e -> {
-                String menuName = btn.getText();
-                navController.navigate(menuName);
-            });
-        }
-
-        // Logout
-        jButton1.addActionListener(e -> navController.navigate("LogOut"));
-    }
 }

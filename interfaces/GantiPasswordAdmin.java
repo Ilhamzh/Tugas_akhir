@@ -4,17 +4,59 @@
  */
 package interfaces;
 
-/**
- *
- * @author sbtsp
- */
+import controller.NavController;
+import javax.swing.JOptionPane;
+import model.UserDAO;
+
 public class GantiPasswordAdmin extends javax.swing.JFrame {
 
-    /**
-     * Creates new form GantiPasswordAdmin
-     */
+    private String userId;
+    private String userName;
+    private NavController navController;
+    private UserDAO userDAO = new UserDAO();
+    
     public GantiPasswordAdmin() {
         initComponents();
+        navController = new NavController(this, "Admin", "admin", "Admin Sistem");
+        setupListeners();
+    }
+    
+    public GantiPasswordAdmin(String userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
+        initComponents();
+        navController = new NavController(this, "Admin", userId, userName);
+        setupListeners();
+        
+    }
+    
+    private void setupListeners() {
+        jButton1.addActionListener(e -> gantiPasswordAction());
+    }
+    
+    private void gantiPasswordAction() {
+        String idToChange = jTextField1.getText(); 
+        String newPassword = new String(jPasswordField1.getPassword());
+        
+        if (idToChange.isEmpty() || newPassword.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "ID dan Password baru harus diisi.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (userDAO.updatePassword(idToChange, newPassword)) {
+            JOptionPane.showMessageDialog(this, "Password untuk ID " + idToChange + " berhasil diperbarui.", "Sukses", JOptionPane.INFORMATION_MESSAGE);
+            
+            // Kembali ke halaman admin (Home Admin)
+            if (navController != null) {
+                navController.navigate("Home");
+            } else {
+                 new Admin().setVisible(true);
+                 this.dispose();
+            }
+             
+        } else {
+            JOptionPane.showMessageDialog(this, "Gagal memperbarui password. Pastikan ID benar.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**

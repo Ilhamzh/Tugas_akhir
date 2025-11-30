@@ -5,36 +5,62 @@
 package interfaces;
 
 import controller.NavController;
-import javax.swing.JButton;
 
-/**
- *
- * @author sbtsp
- */
+import controller.NavController;
+import javax.swing.JOptionPane;
+
 public class RegistrasiUlang extends javax.swing.JFrame {
 
-    /**
-     * Creates new form RegistrasiUlang
-     */
+    private String userId;
+    private String userName;
     private NavController navController;
-private String nimUser;
-private String namaUser;
-private final String userRole = "Mahasiswa";
+    private final String userRole = "Mahasiswa";
 
     public RegistrasiUlang() {
         initComponents();
+        navController = new NavController(this, userRole, "672024116", "Yanto Balap");
+        setupNavListeners();
+        updateHeader("Yanto Balap", "672024116");
     }
     
-    public RegistrasiUlang(String nimUser, String namaUser) {
-    this.nimUser = nimUser;
-    this.namaUser = namaUser;
-    initComponents();
+   
+    public RegistrasiUlang(String userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
+        initComponents();
+        navController = new NavController(this, userRole, userId, userName);
+        setupNavListeners();
+        updateHeader(userName, userId);
+    }
+    
+    private void updateHeader(String nama, String id) {
+        if (jLabel13 != null) jLabel13.setText(nama);
+        if (jLabel14 != null) jLabel14.setText(id);
+    }
 
-    navController = new NavController(this, userRole, nimUser, namaUser);
-
-    setupNavListeners(); // ✅ PENTING
-}
-
+    private void setupNavListeners() {
+        // Navigasi Samping
+        jButton2.addActionListener(e -> navController.navigate("Home"));
+        jButton3.addActionListener(e -> navController.navigate("Registrasi Ulang"));
+        jButton4.addActionListener(e -> navController.navigate("Registrasi Matkul"));
+        jButton5.addActionListener(e -> navController.navigate("Kartu Studi"));
+        jButton6.addActionListener(e -> navController.navigate("Hasil Studi"));
+        jButton7.addActionListener(e -> navController.navigate("Jadwal Kuliah"));
+        jButton8.addActionListener(e -> navController.navigate("Transkrip Nilai"));
+        jButton9.addActionListener(e -> navController.navigate("Bimbingan"));
+        
+        // Logout
+        jButton1.addActionListener(e -> navController.navigate("LogOut"));
+        
+       
+        jComboBox1.addActionListener(e -> {
+            String pilihan = (String) jComboBox1.getSelectedItem();
+            if ("YA".equals(pilihan)) {
+                 
+                 JOptionPane.showMessageDialog(this, "Anda memilih YA. Registrasi Ulang dikirim.", "Info", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -343,28 +369,4 @@ private final String userRole = "Mahasiswa";
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     // End of variables declaration//GEN-END:variables
-
-    private void setupNavListeners() {
-        JButton[] menuButtons = {
-        jButton2, // Home
-        jButton3, // Registrasi Ulang
-        jButton4, // Registrasi Matkul
-        jButton5, // Kartu Studi
-        jButton6, // Hasil Studi
-        jButton7, // Jadwal Kuliah
-        jButton8, // Transkrip Nilai
-        jButton9  // Bimbingan
-    };
-
-    for (JButton btn : menuButtons) {
-        btn.addActionListener(e -> {
-            String menuName = btn.getText();
-            navController.navigate(menuName);
-        });
-    }
-
-    // Tombol Logout
-    jButton1.addActionListener(e -> navController.navigate("LogOut"));
-        
-    }
 }
