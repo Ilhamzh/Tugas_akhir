@@ -80,7 +80,6 @@ public class NavController {
         }
     }
 
-    // ====================== MAHASISWA ======================
 
     private void handleMahasiswaNavigation(String menuName) {
         switch (menuName) {
@@ -117,22 +116,20 @@ public class NavController {
         }
     }
 
-    // ======================== DOSEN ========================
 
     private void handleDosenNavigation(String menuName) {
         switch (menuName) {
             case "Home":
                 openView(new Dosen(userId, namaUser)); 
                 break;
-            case "Input Nilai": // Teks tombol dari form Dosen
+            case "Input Nilai":
                 openView(new InputNilai(userId, namaUser)); 
                 break;
             case "Jadwal Mengajar":
                 openView(new JadwalMengajar(userId, namaUser)); 
                 break;
-            case "Bimbingan MHS": // Teks tombol dari form Dosen
-                // ❗ PERBAIKAN: Mengganti BimbinganMhs dengan Bimbingan karena BimbinganMhs belum ada
-                openView(new Bimbingan(userId, namaUser)); 
+            case "Bimbingan MHS": 
+                openView(new BimbinganMHS(userId, namaUser)); 
                 break;
             case "Lupa Password":
                 openView(new GantiPassword(userId, namaUser));
@@ -145,7 +142,6 @@ public class NavController {
         }
     }
 
-    // ======================== ADMIN ========================
 
     private void handleAdminNavigation(String menuName) {
         switch (menuName) {
