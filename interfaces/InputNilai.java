@@ -7,6 +7,8 @@ package interfaces;
 import controller.NavController;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import model.NilaiRecord;
+import services.NilaiService;
 
 public class InputNilai extends javax.swing.JFrame {
 
@@ -19,7 +21,9 @@ public class InputNilai extends javax.swing.JFrame {
         initComponents();
         navController = new NavController(this, userRole, "D001", "Budi Santoso");
         setupNavListeners();
+        refreshTable();
     }
+    private String currentNim = "672024116";
     
     public InputNilai(String userId, String userName) {
         this.userId = userId;
@@ -27,37 +31,131 @@ public class InputNilai extends javax.swing.JFrame {
         initComponents();
         navController = new NavController(this, userRole, userId, userName);
         setupNavListeners();
-        // loadDataNilai();
+        refreshTable();
     }
     
+    
     private void setupNavListeners() {
-        // Navigasi Samping
+
         jButton2.addActionListener(e -> navController.navigate("Home"));
         jButton7.addActionListener(e -> navController.navigate("Jadwal Mengajar"));
         jButton8.addActionListener(e -> navController.navigate("Bimbingan MHS"));
         jButton9.addActionListener(e -> navController.navigate("Input Nilai"));
         jButton6.addActionListener(e -> navController.navigate("Lupa Password"));
         
-        // Tombol Aksi
+
         jButton3.addActionListener(e -> simpanNilaiAction());
         jButton4.addActionListener(e -> updateNilaiAction());
         jButton5.addActionListener(e -> hapusNilaiAction());
         
-        // Logout
+   
         jButton1.addActionListener(e -> navController.navigate("LogOut"));
     }
     
     private void simpanNilaiAction() {
-         JOptionPane.showMessageDialog(this, "Fungsi Simpan Nilai belum diimplementasikan.", "Info", JOptionPane.INFORMATION_MESSAGE);
+        try {
+            String kode = jTextField5.getText().trim();      // Masukkan Kode
+            String nilai = jTextField6.getText().trim();     // Masukkan Nilai
+            String akStr = jTextField7.getText().trim();     // Masukkan AK
+            String namaMatkul = jTextField9.getText().trim();// Nama Matkul
+            String sksStr = jTextField10.getText().trim();   // SKS
+
+            if (kode.isEmpty() || nilai.isEmpty() || akStr.isEmpty()
+                    || namaMatkul.isEmpty() || sksStr.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Semua field wajib diisi",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            double ak = Double.parseDouble(akStr);
+            int sks = Integer.parseInt(sksStr);
+
+            NilaiRecord record = new NilaiRecord(
+                    currentNim, kode, namaMatkul, sks, nilai, ak
+            );
+
+            NilaiService.getInstance().tambahNilai(record);
+            refreshTable(); 
+
+            JOptionPane.showMessageDialog(this,
+                    "Nilai berhasil disimpan.",
+                    "Info", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "AK dan SKS harus berupa angka.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     private void updateNilaiAction() {
-         JOptionPane.showMessageDialog(this, "Fungsi Update Nilai belum diimplementasikan.", "Info", JOptionPane.INFORMATION_MESSAGE);
+        try {
+            String kode = jTextField5.getText().trim();
+            String nilai = jTextField6.getText().trim();
+            String akStr = jTextField7.getText().trim();
+            String namaMatkul = jTextField9.getText().trim();
+            String sksStr = jTextField10.getText().trim();
+
+            if (kode.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Kode Matkul harus diisi untuk update.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            double ak = Double.parseDouble(akStr);
+            int sks = Integer.parseInt(sksStr);
+
+            NilaiRecord record = new NilaiRecord(
+                    currentNim, kode, namaMatkul, sks, nilai, ak
+            );
+
+            NilaiService.getInstance().updateNilai(record);
+            refreshTable();
+
+            JOptionPane.showMessageDialog(this,
+                    "Nilai berhasil diupdate.",
+                    "Info", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "AK dan SKS harus berupa angka.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     private void hapusNilaiAction() {
-         JOptionPane.showMessageDialog(this, "Fungsi Hapus Nilai belum diimplementasikan.", "Info", JOptionPane.INFORMATION_MESSAGE);
+        String kode = jTextField5.getText().trim();
+        if (kode.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Masukkan Kode Matkul yang akan dihapus.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        NilaiService.getInstance().hapusNilai(currentNim, kode);
+        refreshTable();
+
+        JOptionPane.showMessageDialog(this,
+                "Nilai berhasil dihapus.",
+                "Info", JOptionPane.INFORMATION_MESSAGE);
     }
+    
+    private void refreshTable() {
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+
+        for (NilaiRecord r : NilaiService.getInstance().getNilaiByNim(currentNim)) {
+            model.addRow(new Object[]{
+                r.getKodeMatkul(),
+                r.getNamaMatkul(),
+                r.getSks(),
+                r.getAk(),
+                r.getNilai()
+            });
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -65,7 +163,7 @@ public class InputNilai extends javax.swing.JFrame {
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -332,43 +430,43 @@ public class InputNilai extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }                                        
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }                                        
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }                                        
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }                                        
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }                                        
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }                                        
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton8ActionPerformed
+    }                                        
 
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton9ActionPerformed
+    }                                        
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }                                        
 
     /**
      * @param args the command line arguments
@@ -395,9 +493,9 @@ public class InputNilai extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(InputNilai.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
-        /* Create and display the form */
+
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new InputNilai().setVisible(true);
@@ -405,7 +503,7 @@ public class InputNilai extends javax.swing.JFrame {
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify                     
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -432,5 +530,5 @@ public class InputNilai extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField9;
-    // End of variables declaration//GEN-END:variables
+                
 }
